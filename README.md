@@ -1,7 +1,3 @@
-Vamos criar uma documentação excepcional, detalhada e estruturada para garantir que qualquer pessoa que leia o seu repositório no GitHub tenha uma experiência completa e esclarecedora. Vou expandir cada seção, incluir exemplos, destacar boas práticas e adicionar um glossário, guia de contribuição e outras informações relevantes.
-
----
-
 # 🏛️ Sistema de Biblioteca em Python
 
 ## 📚 Descrição do Projeto
