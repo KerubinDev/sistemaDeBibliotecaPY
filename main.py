@@ -106,20 +106,80 @@ class Biblioteca:
         return self.__usuarios
 
 
-# Exemplo de uso:
+def menu():
+    biblioteca = Biblioteca()
 
-biblioteca = Biblioteca()
+    while True:
+        print("\nMenu de Gerenciamento da Biblioteca")
+        print("1. Adicionar Livro")
+        print("2. Buscar Livro")
+        print("3. Emprestar Livro")
+        print("4. Devolver Livro")
+        print("5. Adicionar Usuário")
+        print("6. Sair")
+        escolha = input("Escolha uma opção: ")
 
-autor1 = Autor("George Orwell", "Britânico")
-livro1 = Livro("1984", autor1.nome, "123456789")
-livro1.adicionar(biblioteca)
+        if escolha == "1":
+            titulo = input("Digite o título do livro: ")
+            autor = input("Digite o nome do autor: ")
+            isbn = input("Digite o ISBN do livro: ")
+            novo_livro = Livro(titulo, autor, isbn)
+            novo_livro.adicionar(biblioteca)
+            print(f'Livro "{titulo}" adicionado à biblioteca.')
 
-usuario1 = Usuario("João Silva", "001")
-biblioteca.adicionar_usuario(usuario1)
+        elif escolha == "2":
+            termo = input("Digite o termo para busca: ").lower()
+            resultados = biblioteca.buscar_livros(termo)
 
-resultados_busca = biblioteca.buscar_livros("Orwell")
-for livro in resultados_busca:
-    print(f"Livro encontrado: {livro.titulo}, Autor: {livro.autor}")
+            if resultados:
+                print("Livros encontrados:")
+                for livro in resultados:
+                    status = "Disponível" if livro.disponivel else "Indisponível"
+                    print(f'Título: {livro.titulo}, Autor: {livro.autor}, ISBN: {livro.isbn}, Status: {status}')
+            else:
+                print("Nenhum livro encontrado.")
 
-livro1.emprestar(usuario1)
-livro1.devolver(usuario1)
+        elif escolha == "3":
+            usuario_id = input("Digite o ID do usuário: ")
+            usuario = next((u for u in biblioteca.usuarios if u.id_usuario == usuario_id), None)
+            if not usuario:
+                print("Usuário não encontrado.")
+                continue
+
+            titulo = input("Digite o título do livro a ser emprestado: ")
+            livro = next((l for l in biblioteca.livros if l.titulo == titulo), None)
+            if livro:
+                livro.emprestar(usuario)
+            else:
+                print("Livro não encontrado.")
+
+        elif escolha == "4":
+            usuario_id = input("Digite o ID do usuário: ")
+            usuario = next((u for u in biblioteca.usuarios if u.id_usuario == usuario_id), None)
+            if not usuario:
+                print("Usuário não encontrado.")
+                continue
+
+            titulo = input("Digite o título do livro a ser devolvido: ")
+            livro = next((l for l in usuario.livros_emprestados if l.titulo == titulo), None)
+            if livro:
+                livro.devolver(usuario)
+            else:
+                print("O usuário não possui esse livro.")
+
+        elif escolha == "5":
+            nome = input("Digite o nome do usuário: ")
+            usuario_id = input("Digite o ID do usuário: ")
+            novo_usuario = Usuario(nome, usuario_id)
+            biblioteca.adicionar_usuario(novo_usuario)
+            print(f'Usuário "{nome}" adicionado ao sistema.')
+
+        elif escolha == "6":
+            print("Saindo do sistema...")
+            break
+
+        else:
+            print("Opção inválida. Tente novamente.")
+
+if __name__ == "__main__":
+    menu()
